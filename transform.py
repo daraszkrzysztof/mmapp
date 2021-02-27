@@ -29,11 +29,10 @@ class Layer(object):
 
     def find_first(self, expr: str):
 
-        queue = []
-        queue.append(self)
+        queue = [self]
 
         while len(queue) > 0:
-            layer = queue.pop();
+            layer = queue.pop()
             for key in layer.children.keys():
                 if re.search(expr, key, re.IGNORECASE):
                     return key, layer.children[key]
@@ -41,8 +40,8 @@ class Layer(object):
                     queue.append(layer.children[key])
 
 
-def transform(root: Element, tagName: str) -> Layer:
-    root = root.findall("./{}".format(tagName))
+def transform(root: Element, tag_name: str) -> Layer:
+    root = root.findall("./{}".format(tag_name))
     root_layer = Layer(root)
     layer = root_layer
     stack = []
@@ -58,7 +57,7 @@ def transform(root: Element, tagName: str) -> Layer:
 
         parent_layer = layer_tuple[0]
         node = layer_tuple[1]
-        layer = Layer(node[1], parent_layer);
+        layer = Layer(node[1], parent_layer)
         parent_layer.children[node[0]] = layer
 
     return root_layer
